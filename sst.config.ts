@@ -7,6 +7,14 @@ async run() {
     link: [bucket]
   });
 
+const auth = new sst.aws.Auth("MyAuth", {
+  issuer: "auth/index.handler",
+});
+
+new sst.aws.Nextjs("MyWeb", {
+  link: [auth]
+});
+
   return {
     api: hono.url,
   };
