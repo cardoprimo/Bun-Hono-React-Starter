@@ -1,8 +1,8 @@
 import { issuer } from "@openauthjs/openauth"
-import { MemoryStorage } from "@openauthjs/openauth/storage/memory"
-import { PasswordProvider } from "@openauthjs/openauth/provider/password"
-import { PasswordUI } from "@openauthjs/openauth/ui/password"
+import { GithubProvider } from "@openauthjs/openauth/provider/github"
 import { subjects } from "../../subjects.js"
+import { CloudflareStorage } from "@openauthjs/openauth/storage/cloudflare"
+
 
 async function getUser(email: string) {
   // Get user from database
@@ -10,34 +10,33 @@ async function getUser(email: string) {
   return "123"
 }
 
+
+const storage = CloudflareStorage({
+  namespace: "bun-starter"
+})
+
 export default issuer({
   subjects,
-  storage: MemoryStorage({
-    persist: "./persist.json",
-  }),
+  storage,
   providers: {
-    password: PasswordProvider(
-      PasswordUI({
-        sendCode: async (email, code) => {
-          console.log(email, code)
-        },
-        validatePassword: (password) => {
-          if (password.length < 8) {
-            return "Password must be at least 8 characters"
-          }
-        },
-      }),
-    ),
+    github: GithubProvider({
+      clientID: process.env.GITHUB_CLIENT_ID!,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+      scopes: ["user:email"],
+    }),
   },
   async allow() {
     return true
   },
   success: async (ctx, value) => {
-    if (value.provider === "password") {
-      return ctx.subject("user", {
-        id: await getUser(value.email),
-      })
-    }
+    if (value.provider === "github") {
+      console.log(value.tokenset.access)
+      userID = ... // lookup user or create them
+    },
+    return ctx.subject("user", {
+      userID,
+      'a workspace id'
+    })
     throw new Error("Invalid provider")
   },
 })
