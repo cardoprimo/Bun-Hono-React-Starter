@@ -1,3 +1,4 @@
+import { handle } from "hono/aws-lambda",
 import { issuer } from "@openauthjs/openauth"
 import { GithubProvider } from "@openauthjs/openauth/provider/github"
 import { subjects } from "../../subjects.js"
@@ -40,3 +41,5 @@ export default issuer({
     throw new Error("Invalid provider")
   },
 })
+
+export const handler = handle(app
