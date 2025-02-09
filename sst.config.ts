@@ -8,7 +8,7 @@ async run() {
   });
 
 const auth = new sst.aws.Auth("MyAuth", {
-  issuer: "auth/index.handler",
+  issuer: "server/issuer.handler",
 });
 
 new sst.aws.Nextjs("MyWeb", {
