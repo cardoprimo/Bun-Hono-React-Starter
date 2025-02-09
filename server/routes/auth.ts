@@ -1,4 +1,4 @@
-import { Hono } from "hono";
+/** import { Hono } from "hono";
 
 import { kindeClient, sessionManager } from "../kinde";
 import { getUser } from "../kinde"
@@ -25,4 +25,4 @@ export const authRoute = new Hono()
   .get("/me", getUser, async (c) => {
     const user = c.var.user
     return c.json({ user });
-  });
+  }); **/
