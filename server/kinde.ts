@@ -1,4 +1,4 @@
-import {
+/** import {
   createKindeServerClient,
   GrantType,
   type SessionManager,
@@ -82,3 +82,4 @@ export const getUser = createMiddleware<Env>(async (c, next) => {
     return c.json({ error: "Unauthorized" }, 401);
   }
 });
+**/
