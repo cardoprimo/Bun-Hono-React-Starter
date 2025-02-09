@@ -30,8 +30,8 @@
     "drizzle-orm": "^0.29.4",
     "drizzle-zod": "^0.5.1",
     "hono": "^3.12.9",
-    "pg": "^8.11.3",
-    "postgres": "^3.4.3",
+    "@libsql/client":"latest",
+ "@t3-oss/env-core": "latest",
     "zod": "^3.22.4",
    "@openauthjs/openauth": "workspace:*"
   
