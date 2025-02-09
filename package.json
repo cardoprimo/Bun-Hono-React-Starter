@@ -33,7 +33,7 @@
     "@libsql/client":"latest",
  "@t3-oss/env-core": "latest",
     "zod": "^3.22.4",
-   "@openauthjs/openauth": "workspace:*"
+   "@openauthjs/openauth": "latest"
   
   },
  "vitest": {
