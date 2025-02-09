@@ -1,13 +1,16 @@
-import { drizzle } from "drizzle-orm/postgres-js";
-
-import postgres from "postgres";
+import { drizzle } from "drizzle-orm/libsql";
+import { createClient } from "@libsql/client";
 import { z } from "zod";
 
-const PostgresEnv = z.object({
-  DATABASE_URL: z.string().url(),
+const TursoEnv = z.object({
+	TURSO_DATABASE_URL: z.string().url(),
+	TURSO_AUTH_TOKEN: z.string(),
 });
-const ProcessEnv = PostgresEnv.parse(process.env);
+const ProcessEnv = TursoEnv.parse(process.env);
 
 // for query purposes
-const queryClient = postgres(ProcessEnv.DATABASE_URL);
+const queryClient = createClient({
+	url: ProcessEnv.TURSO_DATABASE_URL,
+	authToken: ProcessEnv.TURSO_AUTH_TOKEN,
+});
 export const db = drizzle(queryClient);

@@ -5,37 +5,39 @@
   "scripts": {
     "start": "bun server/index.ts",
     "dev": "bun --watch server/index.ts",
-"db:migrate:create": "drizzle-kit generate:sqlite --config drizzle.config.ts",
-"db:migrate": "bunx db/migrate.ts",
+    "db:migrate:create": "drizzle-kit generate:sqlite --config drizzle.config.ts",
+    "db:migrate": "bunx db/migrate.ts",
     "db:seed": "bunx db/seedCall.ts",
     "db:seed:search": "bunx app/lib/search/seed.ts",
     "db:delete": "rm sqlite.db",
     "db:reset": "concurrently -m 1 -c auto bun:db:delete bun:db:migrate bun:db:seed",
-   "test": "concurrently -m 1 -c auto bun:db:reset  bun:test:vitest",
+    "test": "concurrently -m 1 -c auto bun:db:reset  bun:test:vitest",
     "test:vitest": "vitest run",
-    "test:watch": "vitest watch"
+    "test:watch": "vitest watch",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "latest",
     "@types/bun": "latest",
-    "drizzle-kit": "^0.20.14",
-"vitest": "latest"
+    "drizzle-kit": "^0.30.4",
+    "vitest": "latest"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.3.3"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.1.11",
-    "drizzle-orm": "^0.29.4",
+    "@tanstack/react-router": "^1.99.13",
+    "drizzle-orm": "^0.39.2",
     "drizzle-zod": "^0.5.1",
-    "hono": "^3.12.9",
-    "@libsql/client":"latest",
- "@t3-oss/env-core": "latest",
-    "zod": "^3.22.4",
-   "@openauthjs/openauth": "latest"
-  
+    "@libsql/client": "^0.14.0",
+    "@t3-oss/env-core": "latest",
+    "@openauthjs/openauth": "latest",
+    "hono": "^3.12.12",
+    "zod": "^3.24.1"
   },
- "vitest": {
+  "vitest": {
     "maxConcurrency": 1
   }
 }
