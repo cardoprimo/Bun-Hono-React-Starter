@@ -2,6 +2,7 @@
   "name": "bun-starter",
   "module": "server/index.ts",
   "type": "module",
+"workspaces":"[".", "./frontend/*"]",
   "scripts": {
     "start": "bun server/index.ts",
     "dev": "bun --watch server/index.ts",
