@@ -7,10 +7,17 @@ import { type Infer, v } from "convex/values";
 const schema = defineSchema({
   expenses: defineTable({
   id: v.id(), // assuming UUID or some string-like ID
-  userId: varchar().required(),
-  title: varchar().required(),
-  createdAt: timestamp().default(() => new Date()),
-});
+  userId: v.id('users'),
+  title: v.string(),
+}).index("userid_index", userId),
+users: defineSchema({
+  clerkId: v.string().regex(/^user_.+/),
+  expensesId: v.id('expenses')
+}).index('id', clerkId)
+}) ;
+
+
+
 
 export const insertExpenseSchema = {} 
 
