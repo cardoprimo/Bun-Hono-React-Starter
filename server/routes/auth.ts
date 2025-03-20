@@ -1,30 +1,37 @@
 import { Hono } from "hono";
 
 import { kindeClient, sessionManager } from "../kinde";
-import { getUser } from "../kinde";
-import { unknown } from "zod";
+import { SignIn } from "@clerk/clerk-react";
+import { renderToString } from "react-dom/server";
 
 export const authRoute = new Hono()
 	.get("/login", async (c) => {
-		const loginUrl = await kindeClient.login(sessionManager(c));
-		return c.redirect(loginUrl.toString());
+		if (c.var.clerkAuth?.userId) {
+			console.log("already logged in", c.var.clerkAuth.userId);
+			return c.redirect("/");
+		}
+		return c.redirect("/auth/login");
 	})
 	.get("/register", async (c) => {
-		const registerUrl = await kindeClient.register(sessionManager(c));
-		return c.redirect(registerUrl.toString());
-	})
-	.get("/callback", async (c) => {
-		// get called eveyr time we login or register
-		const url = new globalThis.URL(c.req.url) as unknown as globalThis.URL;
-		console.log("url", url);
-		await kindeClient.handleRedirectToApp(sessionManager(c), url);
-		return c.redirect("/");
+		if (c.var.clerkAuth?.userId) {
+			console.log("already logged in", c.var.clerkAuth.userId);
+			return c.redirect("/");
+		}
+		return c.redirect("/auth/register");
 	})
 	.get("/logout", async (c) => {
-		const logoutUrl = await kindeClient.logout(sessionManager(c));
-		return c.redirect(logoutUrl.toString());
+		if (c.var.clerkAuth?.userId) {
+			console.log("already logged in", c.var.clerkAuth.userId);
+			return c.redirect("/");
+		}
+		return c.redirect("/auth/logout");
 	})
-	.get("/me", getUser, async (c) => {
-		const user = c.var.user;
-		return c.json({ user });
+	.get("/me", async (c) => {
+		const userId = c.var.clerkAuth?.userId;
+		if (!userId) {
+			console.log("not logged in");
+			return c.redirect("/");
+		}
+
+		return c.json({ message: "You are logged in.", userId: userId });
 	});

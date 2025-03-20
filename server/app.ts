@@ -3,10 +3,12 @@ import { logger } from "hono/logger";
 import { serveStatic } from "hono/bun";
 import expensesRoute from "./routes/expenses";
 import { authRoute } from "./routes/auth";
+import { clerkMiddleware } from "@hono/clerk-auth";
 
 const app = new Hono();
 
 app.use("*", logger());
+app.use("*", clerkMiddleware());
 
 app.get("/", (c) => c.text("Hello, world!"));
 
