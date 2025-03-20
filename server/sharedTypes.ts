@@ -1,4 +1,4 @@
-import { insertContentSchema } from "./db/schema/schema";
+import { updateExpenseSchema } from "~/convex/schema";
 import { z } from "zod";
 
 export const createExpenseSchema = insertContentSchema.omit({

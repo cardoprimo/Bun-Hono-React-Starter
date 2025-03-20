@@ -3,29 +3,63 @@ import { zValidator } from "@hono/zod-validator";
 
 import { getUser } from "../kinde";
 
-import getUserExpenses from convex
+import { zCreateExpenseSchema } from "@server/lib/zSchemas";
 
-import { createExpenseSchema } from "../sharedTypes";
+import { ConvexClient } from "convex/browser";
+import { api } from "../../convex/_generated/api";
+import type { Id } from "../../convex/_generated/dataModel";
 
-export const expensesRoute = new Hono()
-	.get("/", getUser, async (c) => {
-		const user = c.var.user;
+const convex = new ConvexClient(import.meta.env.CONVEX_URL);
 
-		const expenses = await getUserExpenses(user.id)
+const expensesRoute = new Hono();
 
-		return c.json({ expenses: expenses });
-	})
-	.post("/", getUser, zValidator("json", createExpenseSchema), async (c) => {
-		const expense = await c.req.valid("json");
-		const user = c.var.user;
+expensesRoute.get("/", getUser, async (c) => {
+	console.log("expensesRoute.get");
+	const authUser = c.var.user;
+	if (!authUser) {
+		// redirect to home
+		c.status(401);
+		return c.redirect("/");
+	}
 
-		const validatedExpense = insertContentSchema.parse({
-			...expense,
-			userId: user.id,
+	const convexId = authUser.id as Id<"users">;
+
+	const user = await convex.query(api.users.getConvexUser, { id: convexId });
+	if (!user) {
+		return c.json({ expenses: [] });
+	}
+
+	const expenses = await convex.query(api.expenses.getExpenses, {
+		userId: user._id,
+	});
+
+	return c.json({ expenses: expenses });
+});
+expensesRoute.post(
+	"/",
+	getUser,
+	zValidator("json", zCreateExpenseSchema),
+	async (c) => {
+		const expense = c.req.valid("json");
+		const authUser = c.var.user;
+		if (!authUser) {
+			return c.json("Kinde Unauthorized");
+		}
+		const convexId = authUser.id as Id<"users">;
+
+		const user = await convex.query(api.users.getConvexUser, { id: convexId });
+		if (!user) {
+			return c.json("Convex Unauthorized");
+		}
+
+		const newExpense = await convex.mutation(api.expenses.createExpense, {
+			userId: user._id,
+			title: expense.title,
 		});
 
-		const result = await createExpense(validatedExpense)
-
 		c.status(201);
-		return c.json(result);
-	});
+		return c.json(newExpense);
+	}
+);
+
+export default expensesRoute;

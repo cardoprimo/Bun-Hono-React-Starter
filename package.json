@@ -27,13 +27,17 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@clerk/backend": "^1.25.3",
+    "@hono/clerk-auth": "^2.0.0",
     "@hono/zod-validator": "^0.1.11",
+    "@libsql/client": "^0.14.0",
+    "@openauthjs/openauth": "latest",
+    "@t3-oss/env-core": "latest",
     "@tanstack/react-router": "^1.99.13",
+    "convex": "^1.21.0",
+    "convex-helpers": "^0.1.73",
     "drizzle-orm": "^0.39.2",
     "drizzle-zod": "^0.5.1",
-    "@libsql/client": "^0.14.0",
-    "@t3-oss/env-core": "latest",
-    "@openauthjs/openauth": "latest",
     "hono": "^3.12.12",
     "zod": "^3.24.1"
   },
