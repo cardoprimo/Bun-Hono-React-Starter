@@ -3,12 +3,7 @@ import { zValidator } from "@hono/zod-validator";
 
 import { getUser } from "../kinde";
 
-import { db } from "../db";
-import {
-	expenses as expenseTable,
-	insertContentSchema,
-} from "../db/schema/schema";
-import { eq, desc, sum, and } from "drizzle-orm";
+import getUserExpenses from convex
 
 import { createExpenseSchema } from "../sharedTypes";
 
@@ -16,12 +11,7 @@ export const expensesRoute = new Hono()
 	.get("/", getUser, async (c) => {
 		const user = c.var.user;
 
-		const expenses = await db
-			.select()
-			.from(expenseTable)
-			.where(eq(expenseTable.userId, user.id))
-			.orderBy(desc(expenseTable.createdAt))
-			.limit(100);
+		const expenses = await getUserExpenses(user.id)
 
 		return c.json({ expenses: expenses });
 	})
@@ -34,11 +24,7 @@ export const expensesRoute = new Hono()
 			userId: user.id,
 		});
 
-		const result = await db
-			.insert(expenseTable)
-			.values(validatedExpense)
-			.returning()
-			.then((res) => res[0]);
+		const result = await createExpense(validatedExpense)
 
 		c.status(201);
 		return c.json(result);
