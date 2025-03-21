@@ -9,30 +9,24 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 
 // openAuth
-import { AuthProvider } from "./AuthContext"
 
 // Create a client
 const queryClient = new QueryClient(); //?
 
-
 // Create a new router instance
-const router = createRouter({ routeTree, context: {queryClient} });
+const router = createRouter({ routeTree, context: { queryClient } });
 
 // Register the router instance for type safety
 declare module "@tanstack/react-router" {
-  interface Register {
-    router: typeof router;
-  }
+	interface Register {
+		router: typeof router;
+	}
 }
 
-
-
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-<AuthProvider>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-   </AuthProvider>
-  </React.StrictMode>
+	<React.StrictMode>
+		<QueryClientProvider client={queryClient}>
+			<RouterProvider router={router} />
+		</QueryClientProvider>
+	</React.StrictMode>
 );

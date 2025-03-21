@@ -1,1 +1,0 @@
-const clerkClient = (c) => {};
