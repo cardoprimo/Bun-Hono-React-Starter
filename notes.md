@@ -10,6 +10,7 @@
   - [ ] apiRoute.notfound(jsonNotFound).onError(jsonOnError)
 - [ ] middleware file
   - [ ] import clerkMiddleware, create custom logic for getUser from clerk/convex matching
+  - [ ] shared/types.ts source of truth zodSchemas
   - [ ] add @hono/sentry ``` app.use("*", sentry({ dsn: "__YOUR_SENTRY_DSN__" } ```
 - [ ] add @sentry/bun 
 ``` import * as Sentry from "@sentry/bun";
