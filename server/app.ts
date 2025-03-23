@@ -1,7 +1,6 @@
-import { clerkMiddleware } from '@hono/clerk-auth'
 import { Hono } from 'hono'
 import { serveStatic } from 'hono/bun'
-import { logger } from 'hono/logger'
+import { middlewares } from './middlewares'
 import { authRoute } from './routes/auth'
 import { expensesRoute } from './routes/expenses'
 import jsonNotFound from './utils/jsonNotFound'
@@ -9,8 +8,7 @@ import jsonOnError from './utils/jsonOnError'
 
 const app = new Hono()
 
-app.use('*', logger())
-app.use('*', clerkMiddleware())
+app.use('*', ...middlewares)
 
 app.get('/', c => c.text('Hello, world!'))
 
