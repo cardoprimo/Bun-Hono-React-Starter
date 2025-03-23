@@ -1,69 +1,71 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { toast } from "sonner"
-import { useForm } from "@tanstack/react-form";
+import { Button } from '@/components/ui/button'
+import { Calendar } from '@/components/ui/calendar'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   createExpense,
   getAllExpensesQueryOptions,
   loadingCreateExpenseQueryOptions,
-} from "@/lib/api";
-import { useQueryClient } from "@tanstack/react-query";
+} from '@/lib/api'
+import { createExpenseSchema } from '@server/sharedTypes'
+import { useForm } from '@tanstack/react-form'
+import { useQueryClient } from '@tanstack/react-query'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
-import { zodValidator } from "@tanstack/zod-form-adapter";
+import { zodValidator } from '@tanstack/zod-form-adapter'
 
-import { createExpenseSchema } from "@server/sharedTypes";
+import { toast } from 'sonner'
 
-export const Route = createFileRoute("/_authenticated/create-expense")({
+export const Route = createFileRoute('/_authenticated/create-expense')({
   component: CreateExpense,
-});
+})
 
 function CreateExpense() {
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
   const form = useForm({
     validatorAdapter: zodValidator,
     defaultValues: {
-      title: "",
-      amount: "0",
+      title: '',
+      amount: '0',
       date: new Date().toISOString(),
     },
     onSubmit: async ({ value }) => {
       const existingExpenses = await queryClient.ensureQueryData(
-        getAllExpensesQueryOptions
-      );
+        getAllExpensesQueryOptions,
+      )
 
-      navigate({ to: "/expenses" });
+      navigate({ to: '/expenses' })
 
       // loading state
       queryClient.setQueryData(loadingCreateExpenseQueryOptions.queryKey, {
         expense: value,
-      });
+      })
 
       try {
-        const newExpense = await createExpense({ value });
+        const newExpense = await createExpense({ value })
 
         queryClient.setQueryData(getAllExpensesQueryOptions.queryKey, {
           ...existingExpenses,
           expenses: [newExpense, ...existingExpenses.expenses],
-        });
+        })
 
-        toast("Expense Created", {
+        toast('Expense Created', {
           description: `Successfully created new expense: ${newExpense.id}`,
         })
         // success state
-      } catch (error) {
+      }
+      catch (error) {
         // error state
-        toast("Error", {
+        toast('Error', {
           description: `Failed to create new expense`,
         })
-      } finally {
-        queryClient.setQueryData(loadingCreateExpenseQueryOptions.queryKey, {});
+      }
+      finally {
+        queryClient.setQueryData(loadingCreateExpenseQueryOptions.queryKey, {})
       }
     },
-  });
+  })
 
   return (
     <div className="p-2">
@@ -71,9 +73,9 @@ function CreateExpense() {
       <form.Provider>
         <form
           onSubmit={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            void form.handleSubmit();
+            e.preventDefault()
+            e.stopPropagation()
+            void form.handleSubmit()
           }}
           className="flex flex-col gap-y-4 max-w-xl m-auto"
         >
@@ -82,7 +84,7 @@ function CreateExpense() {
             validators={{
               onChange: createExpenseSchema.shape.title,
             }}
-            children={(field) => (
+            children={field => (
               <div>
                 <Label htmlFor={field.name}>Title</Label>
                 <Input
@@ -90,11 +92,13 @@ function CreateExpense() {
                   name={field.name}
                   value={field.state.value}
                   onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
+                  onChange={e => field.handleChange(e.target.value)}
                 />
-                {field.state.meta.touchedErrors ? (
-                  <em>{field.state.meta.touchedErrors}</em>
-                ) : null}
+                {field.state.meta.touchedErrors
+                  ? (
+                      <em>{field.state.meta.touchedErrors}</em>
+                    )
+                  : null}
               </div>
             )}
           />
@@ -104,7 +108,7 @@ function CreateExpense() {
             validators={{
               onChange: createExpenseSchema.shape.amount,
             }}
-            children={(field) => (
+            children={field => (
               <div>
                 <Label htmlFor={field.name}>Amount</Label>
                 <Input
@@ -113,11 +117,13 @@ function CreateExpense() {
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   type="number"
-                  onChange={(e) => field.handleChange(e.target.value)}
+                  onChange={e => field.handleChange(e.target.value)}
                 />
-                {field.state.meta.touchedErrors ? (
-                  <em>{field.state.meta.touchedErrors}</em>
-                ) : null}
+                {field.state.meta.touchedErrors
+                  ? (
+                      <em>{field.state.meta.touchedErrors}</em>
+                    )
+                  : null}
               </div>
             )}
           />
@@ -127,33 +133,34 @@ function CreateExpense() {
             validators={{
               onChange: createExpenseSchema.shape.date,
             }}
-            children={(field) => (
+            children={field => (
               <div className="self-center">
                 <Calendar
                   mode="single"
                   selected={new Date(field.state.value)}
-                  onSelect={(date) =>
-                    field.handleChange((date ?? new Date()).toISOString())
-                  }
+                  onSelect={date =>
+                    field.handleChange((date ?? new Date()).toISOString())}
                   className="rounded-md border"
                 />
-                {field.state.meta.touchedErrors ? (
-                  <em>{field.state.meta.touchedErrors}</em>
-                ) : null}
+                {field.state.meta.touchedErrors
+                  ? (
+                      <em>{field.state.meta.touchedErrors}</em>
+                    )
+                  : null}
               </div>
             )}
           />
 
           <form.Subscribe
-            selector={(state) => [state.canSubmit, state.isSubmitting]}
+            selector={state => [state.canSubmit, state.isSubmitting]}
             children={([canSubmit, isSubmitting]) => (
               <Button className="mt-4" type="submit" disabled={!canSubmit}>
-                {isSubmitting ? "..." : "Submit"}
+                {isSubmitting ? '...' : 'Submit'}
               </Button>
             )}
           />
         </form>
       </form.Provider>
     </div>
-  );
+  )
 }

@@ -1,19 +1,19 @@
+import type { QueryClient } from '@tanstack/react-query'
+import { Toaster } from '@/components/ui/sonner'
 import {
   createRootRouteWithContext,
   Link,
   Outlet,
-} from "@tanstack/react-router";
-import { Toaster } from "@/components/ui/sonner"
-import { type QueryClient } from "@tanstack/react-query";
+} from '@tanstack/react-router'
 // import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 
 interface MyRouterContext {
-  queryClient: QueryClient;
+  queryClient: QueryClient
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: Root,
-});
+})
 
 function NavBar() {
   return (
@@ -34,7 +34,7 @@ function NavBar() {
         </Link>
       </div>
     </div>
-  );
+  )
 }
 
 function Root() {
@@ -48,5 +48,5 @@ function Root() {
       <Toaster />
       {/* <TanStackRouterDevtools /> */}
     </>
-  );
+  )
 }
