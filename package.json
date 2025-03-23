@@ -19,14 +19,10 @@
     "@clerk/clerk-react": "^5.25.0",
     "@hono/clerk-auth": "^2.0.0",
     "@hono/zod-validator": "^0.1.11",
-    "@libsql/client": "^0.14.0",
-    "@openauthjs/openauth": "latest",
     "@t3-oss/env-core": "latest",
     "@tanstack/react-router": "^1.99.13",
     "convex": "^1.21.0",
     "convex-helpers": "^0.1.73",
-    "drizzle-orm": "^0.39.2",
-    "drizzle-zod": "^0.5.1",
     "hono": "^3.12.12",
     "server": "react-dom/server",
     "zod": "^3.24.1"
@@ -38,14 +34,21 @@
     "@types/bun": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
-    "drizzle-kit": "^0.30.4",
     "eslint": "^9.23.0",
     "eslint-plugin-format": "^1.0.1",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
+    "lint-staged": "^15.5.0",
+    "simple-git-hooks": "^2.12.1",
     "vitest": "latest"
   },
   "vitest": {
     "maxConcurrency": 1
+  },
+  "simple-git-hooks": {
+    "pre-commit": "bun lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
   }
 }
