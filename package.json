@@ -1,29 +1,15 @@
 {
   "name": "bun-starter",
-  "module": "server/index.ts",
   "type": "module",
+  "module": "server/index.ts",
   "scripts": {
     "start": "bun server/index.ts",
     "dev": "bun --watch server/index.ts",
-    "db:migrate:create": "drizzle-kit generate:sqlite --config drizzle.config.ts",
-    "db:migrate": "bunx db/migrate.ts",
-    "db:seed": "bunx db/seedCall.ts",
-    "db:seed:search": "bunx app/lib/search/seed.ts",
-    "db:delete": "rm sqlite.db",
-    "db:reset": "concurrently -m 1 -c auto bun:db:delete bun:db:migrate bun:db:seed",
     "test": "concurrently -m 1 -c auto bun:db:reset  bun:test:vitest",
     "test:vitest": "vitest run",
     "test:watch": "vitest watch",
-    "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
-  },
-  "devDependencies": {
-    "@flydotio/dockerfile": "latest",
-    "@types/bun": "latest",
-    "@types/react": "latest",
-    "@types/react-dom": "latest",
-    "drizzle-kit": "^0.30.4",
-    "vitest": "latest"
+    "lint": "eslint",
+    "lint:fix": "eslint --fix"
   },
   "peerDependencies": {
     "typescript": "^5.3.3"
@@ -44,6 +30,20 @@
     "hono": "^3.12.12",
     "server": "react-dom/server",
     "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^4.11.0",
+    "@eslint-react/eslint-plugin": "^1.37.3",
+    "@flydotio/dockerfile": "latest",
+    "@types/bun": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "drizzle-kit": "^0.30.4",
+    "eslint": "^9.23.0",
+    "eslint-plugin-format": "^1.0.1",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "vitest": "latest"
   },
   "vitest": {
     "maxConcurrency": 1
