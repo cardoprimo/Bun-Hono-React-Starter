@@ -4,10 +4,10 @@
   - [ ] middlewares
   - [ ] strict false
 - [ ] appropriate stoker middleware - https://github.com/w3cj/stoker/tree/main/src
-  - [ ] jsonNotFound
-  - [ ] jsonOnError
-  - [ ] httpStatusCodes
-  - [ ] apiRoute.notfound(jsonNotFound).onError(jsonOnError)
+  - [x] jsonNotFound
+  - [x] jsonOnError
+  - [x] httpStatusCodes
+  - [x] apiRoute.notfound(jsonNotFound).onError(jsonOnError)
 - [ ] middleware file
   - [ ] import clerkMiddleware, create custom logic for getUser from clerk/convex matching
   - [ ] add @hono/sentry `app.use("*", sentry({ dsn: "__YOUR_SENTRY_DSN__" }`
