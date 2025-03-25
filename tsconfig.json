@@ -1,28 +1,28 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "jsx": "react-jsx",
-    "lib": ["ESNext"],
-    "moduleDetection": "force",
-    "module": "ESNext",
+	"compilerOptions": {
+		"target": "ESNext",
+		"jsx": "react-jsx",
+		"lib": ["ESNext"],
+		"moduleDetection": "force",
+		"module": "ESNext",
 
-    /* Bundler mode */
-    "moduleResolution": "bundler",
+		/* Bundler mode */
+		"moduleResolution": "bundler",
 
-    "paths": {
-      "@/*": ["./*"],
-      "@server/*": ["./server/*"],
-      "@convex/*": ["./convex/*"]
-    },
-    "allowImportingTsExtensions": true,
-    "allowJs": true,
-    "strict": true,
-    "noFallthroughCasesInSwitch": true,
-    "noEmit": true,
-    "forceConsistentCasingInFileNames": true,
-    "verbatimModuleSyntax": true,
+		"paths": {
+			"@/*": ["./*"],
+			"@server/*": ["./server/*"],
+			"@convex/*": ["./convex/*"]
+		},
+		"allowImportingTsExtensions": true,
+		"allowJs": true,
+		"strict": true,
+		"noFallthroughCasesInSwitch": true,
+		"noEmit": true,
+		"forceConsistentCasingInFileNames": true,
+		"verbatimModuleSyntax": true,
 
-    /* Linting */
-    "skipLibCheck": true
-  }
+		/* Linting */
+		"skipLibCheck": true
+	}
 }

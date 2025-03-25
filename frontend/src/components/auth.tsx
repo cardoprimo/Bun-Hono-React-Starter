@@ -1,5 +1,5 @@
-import { SignIn } from '@clerk/clerk-react'
+import { SignIn } from '@clerk/clerk-react';
 
 export function Login() {
-  return <SignIn />
+	return <SignIn />;
 }

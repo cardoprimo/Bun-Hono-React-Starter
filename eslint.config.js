@@ -1,10 +1,18 @@
-import antfu from '@antfu/eslint-config'
+import antfu from '@antfu/eslint-config';
 
 export default antfu({
-  formatters: true,
-  react: true,
-  ignores: [
-    '**/README.md',
-    '**/convex/_generated/*',
-  ],
-})
+	formatters: true,
+	stylistic: {
+		indent: 'tab',
+		maxLineLength: 100,
+		singleQuote: true,
+		trailingComma: 'all',
+		semi: true,
+		jsx: true,
+	},
+	rules: {
+		'style/operator-linebreak': 'off',
+	},
+	react: true,
+	ignores: ['**/*.md', '**/convex/_generated/*'],
+});
