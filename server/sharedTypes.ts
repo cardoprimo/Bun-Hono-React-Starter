@@ -5,4 +5,4 @@ export const createSchema = z.object({
 	title: z.string(),
 });
 
-export type CreateExpense = z.infer<typeof createSchema>;
+export type createExpenseSchema = z.infer<typeof createSchema>;

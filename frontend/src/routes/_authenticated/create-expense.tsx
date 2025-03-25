@@ -54,14 +54,12 @@ function CreateExpense() {
 					description: `Successfully created new expense: ${newExpense.id}`,
 				});
 				// success state
-			}
-			catch (error) {
+			} catch (error) {
 				// error state
 				toast('Error', {
 					description: `Failed to create new expense`,
 				});
-			}
-			finally {
+			} finally {
 				queryClient.setQueryData(loadingCreateExpenseQueryOptions.queryKey, {});
 			}
 		},
@@ -84,7 +82,7 @@ function CreateExpense() {
 						validators={{
 							onChange: createExpenseSchema.shape.title,
 						}}
-						children={field => (
+						children={(field) => (
 							<div>
 								<Label htmlFor={field.name}>Title</Label>
 								<Input
@@ -92,13 +90,11 @@ function CreateExpense() {
 									name={field.name}
 									value={field.state.value}
 									onBlur={field.handleBlur}
-									onChange={e => field.handleChange(e.target.value)}
+									onChange={(e) => field.handleChange(e.target.value)}
 								/>
-								{field.state.meta.touchedErrors
-									? (
-											<em>{field.state.meta.touchedErrors}</em>
-										)
-									: null}
+								{field.state.meta.touchedErrors ? (
+									<em>{field.state.meta.touchedErrors}</em>
+								) : null}
 							</div>
 						)}
 					/>
@@ -108,7 +104,7 @@ function CreateExpense() {
 						validators={{
 							onChange: createExpenseSchema.shape.amount,
 						}}
-						children={field => (
+						children={(field) => (
 							<div>
 								<Label htmlFor={field.name}>Amount</Label>
 								<Input
@@ -117,13 +113,11 @@ function CreateExpense() {
 									value={field.state.value}
 									onBlur={field.handleBlur}
 									type="number"
-									onChange={e => field.handleChange(e.target.value)}
+									onChange={(e) => field.handleChange(e.target.value)}
 								/>
-								{field.state.meta.touchedErrors
-									? (
-											<em>{field.state.meta.touchedErrors}</em>
-										)
-									: null}
+								{field.state.meta.touchedErrors ? (
+									<em>{field.state.meta.touchedErrors}</em>
+								) : null}
 							</div>
 						)}
 					/>
@@ -133,26 +127,25 @@ function CreateExpense() {
 						validators={{
 							onChange: createExpenseSchema.shape.date,
 						}}
-						children={field => (
+						children={(field) => (
 							<div className="self-center">
 								<Calendar
 									mode="single"
 									selected={new Date(field.state.value)}
-									onSelect={date =>
-										field.handleChange((date ?? new Date()).toISOString())}
+									onSelect={(date) =>
+										field.handleChange((date ?? new Date()).toISOString())
+									}
 									className="rounded-md border"
 								/>
-								{field.state.meta.touchedErrors
-									? (
-											<em>{field.state.meta.touchedErrors}</em>
-										)
-									: null}
+								{field.state.meta.touchedErrors ? (
+									<em>{field.state.meta.touchedErrors}</em>
+								) : null}
 							</div>
 						)}
 					/>
 
 					<form.Subscribe
-						selector={state => [state.canSubmit, state.isSubmitting]}
+						selector={(state) => [state.canSubmit, state.isSubmitting]}
 						children={([canSubmit, isSubmitting]) => (
 							<Button className="mt-4" type="submit" disabled={!canSubmit}>
 								{isSubmitting ? '...' : 'Submit'}

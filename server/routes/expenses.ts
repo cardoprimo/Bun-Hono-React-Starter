@@ -11,8 +11,6 @@ const convex = new ConvexClient(import.meta.env.CONVEX_URL);
 
 export const expensesRoute = new Hono()
 	.get('/', async (c) => {
-		console.log('expensesRoute.get');
-
 		const authUser = c.var.clerkAuth?.userId;
 		if (!authUser) {
 			// redirect to home
@@ -37,20 +35,24 @@ export const expensesRoute = new Hono()
 		const expense = c.req.valid('json');
 		const authUser = c.var.clerkAuth?.userId;
 		if (!authUser) {
-			return c.json('Clerk Unauthorized');
+			return c.json({ error: 'Clerk Unauthorized' }, 401);
 		}
 		const convexId = authUser as Id<'users'>;
 
 		const user = await convex.query(api.users.getConvexUser, { id: convexId });
 		if (!user) {
-			return c.json('Convex Unauthorized');
+			return c.json({ error: 'Convex Unauthorized' }, 401);
 		}
 
-		const newExpense = await convex.mutation(api.expenses.createExpense, {
-			userId: user._id,
-			title: expense.title,
-		});
+		try {
+			const newExpense = await convex.mutation(api.expenses.createExpense, {
+				userId: user._id,
+				title: expense.title,
+			});
 
-		c.status(201);
-		return c.json(newExpense);
+			return c.json({ expense: newExpense }, 201);
+		} catch (e) {
+			console.error(e);
+			return c.json({ error: 'Failed to create expense' }, 500);
+		}
 	});

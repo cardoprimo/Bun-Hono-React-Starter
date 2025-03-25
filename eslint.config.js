@@ -12,6 +12,7 @@ export default antfu({
 	},
 	rules: {
 		'style/operator-linebreak': 'off',
+		'style/brace-style': 'off',
 	},
 	react: true,
 	ignores: ['**/*.md', '**/convex/_generated/*'],

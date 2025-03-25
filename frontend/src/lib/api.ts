@@ -39,7 +39,7 @@ export const getAllExpensesQueryOptions = queryOptions({
 export async function createExpense({ value }: { value: CreateExpense }) {
 	const res = await api.expenses.$post({ json: value });
 	if (!res.ok) {
-		throw new Error('server error');
+		throw new Error((await res.json()).error);
 	}
 
 	const newExpense = await res.json();
