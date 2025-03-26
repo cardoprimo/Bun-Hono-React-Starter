@@ -1,5 +1,6 @@
 import { serveStatic } from 'hono/bun';
 import { createApp } from './lib/create-app';
+import { middlewares } from './middlewares';
 import { authRoute } from './routes/auth';
 import { expensesRoute } from './routes/expenses';
 import { jsonNotFound } from './utils/notFound';
@@ -7,7 +8,9 @@ import { jsonOnError } from './utils/onError';
 
 const app = createApp();
 
-app.get('/', c => c.text('Hello, world!'));
+app.use('*', ...middlewares);
+
+app.get('/', (c) => c.text('Hello, world!'));
 
 const _apiRoutes = app
 	.basePath('/api')

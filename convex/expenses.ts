@@ -1,13 +1,11 @@
 import type { Doc, Id } from './_generated/dataModel';
 import type { QueryCtx } from './_generated/server';
 import invariant from 'tiny-invariant';
-import {
-	mutation,
-	query,
-
-} from './_generated/server';
+import { mutation, query } from './_generated/server';
 import {
 	createExpenseSchema,
+	deleteExpenseSchema,
+	selectExpenseSchema,
 	selectUserExpensesSchema,
 	updateExpenseSchema,
 } from './schema';
@@ -20,12 +18,10 @@ function withoutSystemFields<T extends { _creationTime: number; _id: Id<any> }>(
 }
 
 async function getUserExpenses(ctx: QueryCtx, userId: Id<'users'>) {
-	const expenses = await Promise.all([
-		ctx.db
-			.query('expenses')
-			.withIndex('userid_index', exp => exp.eq('userId', userId))
-			.collect(),
-	]);
+	const expenses = await ctx.db
+		.query('expenses')
+		.withIndex('userid_index', (exp) => exp.eq('userId', userId))
+		.collect();
 
 	return expenses;
 }
@@ -34,6 +30,14 @@ export const getExpenses = query({
 	args: selectUserExpensesSchema,
 	handler: async (ctx, { userId }) => {
 		return await getUserExpenses(ctx, userId);
+	},
+});
+
+export const getExpense = query({
+	args: selectExpenseSchema,
+	handler: async (ctx, { id }) => {
+		const expense = await ensureExpenseExists(ctx, id);
+		return withoutSystemFields(expense);
 	},
 });
 
@@ -61,3 +65,11 @@ async function ensureExpenseExists(
 	invariant(expense, `missing item: ${expenseId}`);
 	return expense;
 }
+
+export const deleteExpense = mutation({
+	args: deleteExpenseSchema,
+	handler: async (ctx, { id }) => {
+		const expense = await ensureExpenseExists(ctx, id);
+		await ctx.db.delete(expense._id);
+	},
+});

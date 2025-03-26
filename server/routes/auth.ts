@@ -1,6 +1,6 @@
-import { Hono } from 'hono';
+import { createApp } from '../lib/create-app';
 
-export const authRoute = new Hono()
+export const authRoute = createApp()
 	.get('/login', async (c) => {
 		if (c.var.clerkAuth?.userId) {
 			console.log('already logged in', c.var.clerkAuth.userId);
@@ -23,7 +23,7 @@ export const authRoute = new Hono()
 		return c.redirect('/auth/logout');
 	})
 	.get('/me', async (c) => {
-		const userId = c.var.clerkAuth?.userId;
+		const userId = c.get('').var.clerkAuth?.userId;
 		if (!userId) {
 			console.log('not logged in');
 			return c.redirect('/');

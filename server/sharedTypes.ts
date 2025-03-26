@@ -1,8 +1,8 @@
-import { z } from 'zod';
+import type { z } from 'zod';
+import type {
+	zCreateExpenseSchema,
+	zDeleteExpenseSchema,
+} from './lib/zSchemas';
 
-export const createSchema = z.object({
-	userId: z.string(),
-	title: z.string(),
-});
-
-export type createExpenseSchema = z.infer<typeof createSchema>;
+export type createExpenseSchema = z.infer<typeof zCreateExpenseSchema>;
+export type deleteExpenseSchema = z.infer<typeof zDeleteExpenseSchema>;

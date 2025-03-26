@@ -1,3 +1,6 @@
+import { ClerkProvider, useAuth } from '@clerk/clerk-react';
+import { ConvexQueryClient } from '@convex-dev/react-query';
+import { env } from '@server/env';
 import {
 	MutationCache,
 	QueryClient,
@@ -8,21 +11,18 @@ import {
 	RouterProvider,
 } from '@tanstack/react-router';
 import { routerWithQueryClient } from '@tanstack/react-router-with-query';
-import React from 'react';
-import toast from 'react-hot-toast';
-import ReactDOM from 'react-dom/client';
-import { ClerkProvider, useAuth } from '@clerk/clerk-react';
-import { ConvexProviderWithClerk } from 'convex/react-clerk';
 import { ConvexReactClient } from 'convex/react';
-import { env } from '@server/env';
+import { ConvexProviderWithClerk } from 'convex/react-clerk';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 
-// Import the generated route tree
-import { routeTree } from './routeTree.gen';
+import toast from 'react-hot-toast';
 
-import './index.css';
 import { DefaultCatchBoundary } from './components/DefaultCatchBoundary';
 import { NotFound } from './components/NotFound';
-import { ConvexQueryClient } from '@convex-dev/react-query';
+// Import the generated route tree
+import { routeTree } from './routeTree.gen';
+import './index.css';
 
 const convexQueryClient = new ConvexQueryClient(env.CONVEX_URL);
 

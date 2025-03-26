@@ -1,3 +1,4 @@
+import type { Id } from '@convex/_generated/dataModel';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
@@ -83,14 +84,14 @@ function Expenses() {
 										</TableCell>
 									</TableRow>
 								))
-						: data?.expenses.map(expense => (
-							<TableRow key={expense.id}>
-								<TableCell className="font-medium">{expense.id}</TableCell>
+						: data?.expenses.map((expense) => (
+							<TableRow key={expense._id}>
+								<TableCell className="font-medium">{expense._id}</TableCell>
 								<TableCell>{expense.title}</TableCell>
 								<TableCell>{expense.amount}</TableCell>
 								<TableCell>{expense.date.split('T')[0]}</TableCell>
 								<TableCell>
-									<ExpenseDeleteButton id={expense.id} />
+									<ExpenseDeleteButton id={expense._id} />
 								</TableCell>
 							</TableRow>
 						))}
@@ -100,7 +101,7 @@ function Expenses() {
 	);
 }
 
-function ExpenseDeleteButton({ id }: { id: number }) {
+function ExpenseDeleteButton({ id }: { id: Id<'expenses'> }) {
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: deleteExpense,
@@ -116,9 +117,9 @@ function ExpenseDeleteButton({ id }: { id: number }) {
 
 			queryClient.setQueryData(
 				getAllExpensesQueryOptions.queryKey,
-				existingExpenses => ({
+				(existingExpenses) => ({
 					...existingExpenses,
-					expenses: existingExpenses!.expenses.filter(e => e.id !== id),
+					expenses: existingExpenses!.expenses.filter((e) => e._id !== id),
 				}),
 			);
 		},

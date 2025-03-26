@@ -1,15 +1,16 @@
 - [x] setup eslint- run bunx @antfu/eslint-config@latest
-- [ ] createApp/ createRouter extract new hono with
-  - [ ] loggers
+- [x] createApp/ createRouter extract new hono with
+  - [x] loggers
   - [ ] middlewares
-  - [ ] strict false
-- [ ] appropriate stoker middleware - https://github.com/w3cj/stoker/tree/main/src
+  - [x] strict false
+- [x] appropriate stoker middleware - https://github.com/w3cj/stoker/tree/main/src
   - [x] jsonNotFound
   - [x] jsonOnError
   - [x] httpStatusCodes
   - [x] apiRoute.notfound(jsonNotFound).onError(jsonOnError)
-- [ ] middleware file
+- [x] middleware file
   - [ ] import clerkMiddleware, create custom logic for getUser from clerk/convex matching
+  - [ ] createConvexUserFromClerk
   - [ ] add @hono/sentry `app.use("*", sentry({ dsn: "__YOUR_SENTRY_DSN__" }`
 - [ ] add @sentry/bun
 

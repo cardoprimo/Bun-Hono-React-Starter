@@ -1,5 +1,6 @@
+import type { Id } from '@convex/_generated/dataModel';
 import type { ApiRoutes } from '@server/app';
-import type { CreateExpense } from '@server/sharedTypes';
+import type { createExpenseSchema } from '@server/sharedTypes';
 import { queryOptions } from '@tanstack/react-query';
 import { hc } from 'hono/client';
 
@@ -36,7 +37,7 @@ export const getAllExpensesQueryOptions = queryOptions({
 	staleTime: 1000 * 60 * 5,
 });
 
-export async function createExpense({ value }: { value: CreateExpense }) {
+export async function createExpense({ value }: { value: createExpenseSchema }) {
 	const res = await api.expenses.$post({ json: value });
 	if (!res.ok) {
 		throw new Error((await res.json()).error);
@@ -47,7 +48,7 @@ export async function createExpense({ value }: { value: CreateExpense }) {
 }
 
 export const loadingCreateExpenseQueryOptions = queryOptions<{
-	expense?: CreateExpense;
+	expense?: createExpenseSchema;
 }>({
 	queryKey: ['loading-create-expense'],
 	queryFn: async () => {
@@ -56,7 +57,7 @@ export const loadingCreateExpenseQueryOptions = queryOptions<{
 	staleTime: Infinity,
 });
 
-export async function deleteExpense({ id }: { id: number }) {
+export async function deleteExpense({ id }: { id: Id<'expenses'> }) {
 	const res = await api.expenses[':id{[0-9]+}'].$delete({
 		param: { id: id.toString() },
 	});

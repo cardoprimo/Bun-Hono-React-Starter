@@ -1,6 +1,5 @@
 import { v } from 'convex/values';
 import { internalQuery, query } from './_generated/server';
-import { Id } from './_generated/dataModel';
 
 export const getConvexUser = query({
 	args: v.object({
@@ -12,9 +11,10 @@ export const getConvexUser = query({
 	},
 });
 
+export const create;
+
 export const getConvexUserFromClerkId = internalQuery({
 	args: { clerkId: v.id('users') },
-
 	handler: async (ctx, args) => {
 		await ctx.db
 			.query('users')

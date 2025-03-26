@@ -7,6 +7,8 @@ const schema = defineSchema({
 	expenses: defineTable({
 		userId: v.id('users'),
 		title: v.string(),
+		amount: v.number(),
+		date: v.string(),
 	}).index('userid_index', ['userId']),
 	users: defineTable({
 		expenseIds: v.array(v.id('expenses')),
@@ -26,12 +28,14 @@ export const selectUserExpensesSchema = v.object({
 });
 
 export const selectExpenseSchema = v.object({
-	id: expenses.fields.userId,
+	id: v.id('expenses'),
 });
 
 export const createExpenseSchema = v.object({
 	userId: expenses.fields.userId,
 	title: v.string(),
+	amount: v.number(),
+	date: v.string(),
 });
 
 export const updateExpenseSchema = v.object({
@@ -50,3 +54,4 @@ export const updateUserSchema = v.object({
 export type CreateExpense = Infer<typeof createExpenseSchema>;
 export type SelectExpenses = Infer<typeof selectUserExpensesSchema>;
 export type SelectExpense = Infer<typeof selectExpenseSchema>;
+export type DeleteExpense = Infer<typeof deleteExpenseSchema>;

@@ -1,5 +1,8 @@
 import { createEnv } from '@t3-oss/env-core';
+import dotenv from 'dotenv';
 import { z } from 'zod';
+
+dotenv.config();
 
 export const env = createEnv({
 	server: {
@@ -11,11 +14,15 @@ export const env = createEnv({
 	},
 	clientPrefix: 'PUBLIC_',
 	client: {
-		PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().startsWith('pk_'),
+		PUBLIC_CLERK_PUBLISHABLE_KEY: z.string(),
 	},
 	runtimeEnv: {
 		// eslint-disable-next-line node/prefer-global/process
-		NODE_ENV: process.env.NODE_ENV,
+		NODE_ENV: process.env.NODE_ENV || 'development',
+		CLERK_JWT_ISSUER_URL: process.env.CLERK_JWT_ISSUER_URL,
+		CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+		CONVEX_DEPLOYMENT: process.env.CONVEX_DEPLOYMENT,
+		CONVEX_URL: process.env.CONVEX_URL,
+		PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.PUBLIC_CLERK_PUBLISHABLE_KEY,
 	},
-	emptyStringAsUndefined: true,
 });

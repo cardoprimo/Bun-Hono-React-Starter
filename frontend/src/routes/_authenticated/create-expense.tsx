@@ -92,9 +92,11 @@ function CreateExpense() {
 									onBlur={field.handleBlur}
 									onChange={(e) => field.handleChange(e.target.value)}
 								/>
-								{field.state.meta.touchedErrors ? (
-									<em>{field.state.meta.touchedErrors}</em>
-								) : null}
+								{field.state.meta.touchedErrors
+									? (
+											<em>{field.state.meta.touchedErrors}</em>
+										)
+									: null}
 							</div>
 						)}
 					/>
@@ -115,9 +117,11 @@ function CreateExpense() {
 									type="number"
 									onChange={(e) => field.handleChange(e.target.value)}
 								/>
-								{field.state.meta.touchedErrors ? (
-									<em>{field.state.meta.touchedErrors}</em>
-								) : null}
+								{field.state.meta.touchedErrors
+									? (
+											<em>{field.state.meta.touchedErrors}</em>
+										)
+									: null}
 							</div>
 						)}
 					/>
@@ -133,13 +137,14 @@ function CreateExpense() {
 									mode="single"
 									selected={new Date(field.state.value)}
 									onSelect={(date) =>
-										field.handleChange((date ?? new Date()).toISOString())
-									}
+										field.handleChange((date ?? new Date()).toISOString())}
 									className="rounded-md border"
 								/>
-								{field.state.meta.touchedErrors ? (
-									<em>{field.state.meta.touchedErrors}</em>
-								) : null}
+								{field.state.meta.touchedErrors
+									? (
+											<em>{field.state.meta.touchedErrors}</em>
+										)
+									: null}
 							</div>
 						)}
 					/>

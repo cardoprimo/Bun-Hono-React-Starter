@@ -1,15 +1,22 @@
 import type { Id } from '../../convex/_generated/dataModel';
 import { zValidator } from '@hono/zod-validator';
 
-import { zCreateExpenseSchema } from '@server/lib/zSchemas';
+import {
+	zCreateExpenseSchema,
+	zDeleteExpenseSchema,
+} from '@server/lib/zSchemas';
 
 import { ConvexClient } from 'convex/browser';
-import { Hono } from 'hono';
 import { api } from '../../convex/_generated/api';
+import { env } from '../env';
+import { createApp } from '../lib/create-app';
+import { jsonNotFound } from '../utils/notFound';
+import { jsonOnError } from '../utils/onError';
+import { jsonOk, jsonUnauthorized } from '../utils/responses';
 
-const convex = new ConvexClient(import.meta.env.CONVEX_URL);
+const convex = new ConvexClient(env.CONVEX_URL);
 
-export const expensesRoute = new Hono()
+export const expensesRoute = createApp()
 	.get('/', async (c) => {
 		const authUser = c.var.clerkAuth?.userId;
 		if (!authUser) {
@@ -48,6 +55,8 @@ export const expensesRoute = new Hono()
 			const newExpense = await convex.mutation(api.expenses.createExpense, {
 				userId: user._id,
 				title: expense.title,
+				amount: expense.amount,
+				date: expense.date,
 			});
 
 			return c.json({ expense: newExpense }, 201);
@@ -55,4 +64,40 @@ export const expensesRoute = new Hono()
 			console.error(e);
 			return c.json({ error: 'Failed to create expense' }, 500);
 		}
-	});
+	})
+	.delete(
+		':id{[0-9]+}',
+		zValidator('param', zDeleteExpenseSchema),
+		async (c) => {
+			const user = c.var.user;
+
+			const expenseId = c.req.param('id') as Id<'expenses'>;
+
+			const expense = await convex.query(api.expenses.getExpense, {
+				id: expenseId,
+			});
+			if (!expense) {
+				return jsonNotFound;
+			}
+
+			if (!user) {
+				return jsonUnauthorized(c);
+			}
+
+			if (!user.expenseIds.includes(expenseId)) {
+				return jsonUnauthorized(c, {
+					message: `User unauthorized to delete expense`,
+				});
+			}
+
+			try {
+				await convex.mutation(api.expenses.deleteExpense, {
+					id: expenseId,
+				});
+				return jsonOk(c, { id: expenseId, message: 'Expense deleted' });
+			} catch (e) {
+				console.error(e);
+				return jsonOnError;
+			}
+		},
+	);
