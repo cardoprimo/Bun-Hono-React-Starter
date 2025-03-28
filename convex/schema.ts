@@ -11,8 +11,11 @@ const schema = defineSchema({
 		date: v.string(),
 	}).index('userid_index', ['userId']),
 	users: defineTable({
+		clerkId: v.string(),
 		expenseIds: v.array(v.id('expenses')),
-	}).index('expensesid_index', ['expenseIds']),
+	})
+		.index('expensesid_index', ['expenseIds'])
+		.index('clerkid_index', ['clerkId']),
 });
 
 export default schema;
@@ -24,7 +27,7 @@ export type Expense = Infer<typeof expenses>;
 export type User = Infer<typeof users>;
 
 export const selectUserExpensesSchema = v.object({
-	userId: expenses.fields.userId,
+	clerkId: v.string(),
 });
 
 export const selectExpenseSchema = v.object({
@@ -49,6 +52,14 @@ export const deleteExpenseSchema = v.object({
 
 export const updateUserSchema = v.object({
 	id: v.id('users'),
+});
+
+export const createUserSchema = v.object({
+	clerkId: users.fields.clerkId,
+});
+
+export const getConvexUserFromClerkIdSchema = v.object({
+	clerkId: users.fields.clerkId,
 });
 
 export type CreateExpense = Infer<typeof createExpenseSchema>;

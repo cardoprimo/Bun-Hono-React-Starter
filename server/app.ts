@@ -10,7 +10,7 @@ const app = createApp();
 
 app.use('*', ...middlewares);
 
-app.get('/', (c) => c.text('Hello, world!'));
+// app.get('/', (c) => c.text('Hello, world!'));
 
 const _apiRoutes = app
 	.basePath('/api')

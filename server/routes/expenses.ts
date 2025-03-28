@@ -1,14 +1,11 @@
 import type { Id } from '../../convex/_generated/dataModel';
 import { zValidator } from '@hono/zod-validator';
 
-import {
-	zCreateExpenseSchema,
-	zDeleteExpenseSchema,
-} from '@server/lib/zSchemas';
+import { zCreateExpenseSchema, zDeleteExpenseSchema } from '@shared/zSchemas';
 
 import { ConvexClient } from 'convex/browser';
 import { api } from '../../convex/_generated/api';
-import { env } from '../env';
+import { env } from '../../shared/env';
 import { createApp } from '../lib/create-app';
 import { jsonNotFound } from '../utils/notFound';
 import { jsonOnError } from '../utils/onError';
@@ -18,22 +15,13 @@ const convex = new ConvexClient(env.CONVEX_URL);
 
 export const expensesRoute = createApp()
 	.get('/', async (c) => {
-		const authUser = c.var.clerkAuth?.userId;
-		if (!authUser) {
-			// redirect to home
-			c.status(401);
-			return c.redirect('/');
-		}
-
-		const convexId = authUser as Id<'users'>;
-
-		const user = await convex.query(api.users.getConvexUser, { id: convexId });
+		const user = c.get('user');
 		if (!user) {
 			return c.json({ expenses: [] });
 		}
 
 		const expenses = await convex.query(api.expenses.getExpenses, {
-			userId: user._id,
+			clerkId: c.var.user.clerkId,
 		});
 
 		return c.json({ expenses });

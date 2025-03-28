@@ -1,24 +1,45 @@
+import type { User } from '@/convex/schema';
 import { api } from '@/convex/_generated/api';
 import { clerkMiddleware, getAuth } from '@hono/clerk-auth';
+import { ConvexHttpClient } from 'convex/browser';
 import { cors } from 'hono/cors';
 import { createMiddleware } from 'hono/factory';
 import { logger } from 'hono/logger';
 import { requestId } from 'hono/request-id';
-import { env } from '../env';
+import { env } from '../../shared/env';
+import { onError } from '../utils/onError';
 
 const convexUserMiddleware = createMiddleware(async (c, next) => {
+	const convex = new ConvexHttpClient(env.CONVEX_URL);
+
 	const clerkUser = getAuth(c);
-	if (!clerkUser) {
-		return c.json({ error: 'Unauthorized clerk' }, 401);
+	if (!clerkUser?.userId) {
+		c.set('user', null);
+		await next();
+		return;
 	}
-	const convexUser = (api.users.getConvexUser, clerkUser.userId);
-	if (!convexUser) {
+
+	const clerkUserId: User['clerkId'] = clerkUser.userId;
+
+	const convexUser = (api.users.getConvexUserFromClerkId, clerkUserId);
+	if (convexUser) {
+		c.set('user', convexUser);
+		await next();
+	} else {
 		// create convex user
-		await (api.users.getConvexUser, { clerkId: clerkUser.userId });
-		return c.json({ error: 'Unauthorized convex' }, 401);
+		try {
+			const newUser = await convex.mutation(api.users.createUser, {
+				clerkId: clerkUserId,
+			});
+			c.set('user', newUser);
+			await next();
+			if (!newUser) {
+				return c.json(onError, 500);
+			}
+		} catch {
+			return c.json({ error: 'Unauthorized convex' }, 401);
+		}
 	}
-	c.set('userId', convexUser);
-	await next();
 });
 
 export const middlewares = [

@@ -1,5 +1,6 @@
 import { v } from 'convex/values';
-import { internalQuery, query } from './_generated/server';
+import { mutation, query } from './_generated/server';
+import { createUserSchema, getConvexUserFromClerkIdSchema } from './schema';
 
 export const getConvexUser = query({
 	args: v.object({
@@ -11,14 +12,23 @@ export const getConvexUser = query({
 	},
 });
 
-export const create;
+export const createUser = mutation({
+	args: createUserSchema,
+	handler: async (ctx, { clerkId }) => {
+		const id = await ctx.db.insert('users', { expenseIds: [], clerkId });
+		const user = await ctx.db.get(id);
+		return user;
+	},
+});
 
-export const getConvexUserFromClerkId = internalQuery({
-	args: { clerkId: v.id('users') },
+export const getConvexUserFromClerkId = query({
+	args: getConvexUserFromClerkIdSchema,
 	handler: async (ctx, args) => {
-		await ctx.db
+		const user = await ctx.db
 			.query('users')
-			.withIndex('by_id', (u) => u.eq('_id', args.clerkId))
+			.withIndex('clerkid_index', (u) => u.eq('clerkId', args.clerkId))
 			.collect();
+
+		return user[0];
 	},
 });

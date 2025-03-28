@@ -1,4 +1,4 @@
-import { env } from '../server/env';
+import { env } from '../shared/env';
 
 export default {
 	providers: [

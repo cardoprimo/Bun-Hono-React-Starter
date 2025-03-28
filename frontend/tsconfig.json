@@ -2,21 +2,32 @@
 	"compilerOptions": {
 		"target": "ES2020",
 		"jsx": "react-jsx",
-		"lib": ["ES2020", "DOM", "DOM.Iterable"],
+		"lib": [
+			"ES2020",
+			"DOM",
+			"DOM.Iterable"
+		],
 		"useDefineForClassFields": true,
 		"baseUrl": ".",
 		"module": "ESNext",
-
 		/* Bundler mode */
 		"moduleResolution": "bundler",
 		"paths": {
-			"@/*": ["./src/*"],
-			"@server/*": ["../server/*"],
-			"@convex/*": ["../convex/*"]
+			"@/*": [
+				"./src/*"
+			],
+			"@server/*": [
+				"../server/*"
+			],
+			"@convex/*": [
+				"../convex/*"
+			],
+			"@shared/*": [
+				"../shared/*"
+			]
 		},
 		"resolveJsonModule": true,
 		"allowImportingTsExtensions": true,
-
 		/* Linting */
 		"strict": true,
 		"noFallthroughCasesInSwitch": true,
@@ -26,6 +37,13 @@
 		"isolatedModules": true,
 		"skipLibCheck": true
 	},
-	"references": [{ "path": "./tsconfig.node.json" }],
-	"include": ["src"]
+	"references": [
+		{
+			"path": "./tsconfig.node.json"
+		}
+	],
+	"include": [
+		"src",
+		"../shared"
+	]
 }

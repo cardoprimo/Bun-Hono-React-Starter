@@ -31,8 +31,7 @@ function Index() {
 		queryFn: getTotalSpent,
 	});
 
-	if (error)
-		return `An error has occurred: ${error.message}`;
+	if (error) return `An error has occurred: ${error.message}`;
 
 	return (
 		<Card className="w-[350px] m-auto">

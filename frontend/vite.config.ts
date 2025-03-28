@@ -6,10 +6,13 @@ import { defineConfig } from 'vite';
 // https://vitejs.dev/config/
 export default defineConfig({
 	plugins: [react(), TanStackRouterVite()],
+	envPrefix: 'PUBLIC_',
 	resolve: {
 		alias: {
 			'@': path.resolve(import.meta.dir, './src'),
 			'@server': path.resolve(import.meta.dir, '../server'),
+			'@convex': path.resolve(import.meta.dir, '../convex'),
+			'@shared': path.resolve(import.meta.dir, '../shared'),
 		},
 	},
 	server: {

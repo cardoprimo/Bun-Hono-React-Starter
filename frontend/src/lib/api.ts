@@ -1,6 +1,6 @@
 import type { Id } from '@convex/_generated/dataModel';
 import type { ApiRoutes } from '@server/app';
-import type { createExpenseSchema } from '@server/sharedTypes';
+import type { createExpenseSchema } from '@shared/sharedTypes';
 import { queryOptions } from '@tanstack/react-query';
 import { hc } from 'hono/client';
 
@@ -43,8 +43,7 @@ export async function createExpense({ value }: { value: createExpenseSchema }) {
 		throw new Error((await res.json()).error);
 	}
 
-	const newExpense = await res.json();
-	return newExpense;
+	return await res.json();
 }
 
 export const loadingCreateExpenseQueryOptions = queryOptions<{

@@ -7,14 +7,14 @@ import {
 	getAllExpensesQueryOptions,
 	loadingCreateExpenseQueryOptions,
 } from '@/lib/api';
-import { createExpenseSchema } from '@server/sharedTypes';
 import { useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-
 import { zodValidator } from '@tanstack/zod-form-adapter';
 
 import { toast } from 'sonner';
+
+import { zCreateExpenseSchema } from '../../../../shared/zSchemas';
 
 export const Route = createFileRoute('/_authenticated/create-expense')({
 	component: CreateExpense,
@@ -26,15 +26,12 @@ function CreateExpense() {
 	const form = useForm({
 		validatorAdapter: zodValidator,
 		defaultValues: {
+			userId: '',
 			title: '',
-			amount: '0',
+			amount: 0,
 			date: new Date().toISOString(),
 		},
 		onSubmit: async ({ value }) => {
-			const existingExpenses = await queryClient.ensureQueryData(
-				getAllExpensesQueryOptions,
-			);
-
 			navigate({ to: '/expenses' });
 
 			// loading state
@@ -43,18 +40,16 @@ function CreateExpense() {
 			});
 
 			try {
-				const newExpense = await createExpense({ value });
+				await createExpense({ value });
 
-				queryClient.setQueryData(getAllExpensesQueryOptions.queryKey, {
-					...existingExpenses,
-					expenses: [newExpense, ...existingExpenses.expenses],
-				});
+				queryClient.invalidateQueries(getAllExpensesQueryOptions);
 
 				toast('Expense Created', {
-					description: `Successfully created new expense: ${newExpense.id}`,
+					description: `Successfully created new expense`,
 				});
 				// success state
 			} catch (error) {
+				console.error(error);
 				// error state
 				toast('Error', {
 					description: `Failed to create new expense`,
@@ -80,7 +75,13 @@ function CreateExpense() {
 					<form.Field
 						name="title"
 						validators={{
-							onChange: createExpenseSchema.shape.title,
+							onChange: (value) => {
+								const result =
+									zCreateExpenseSchema.shape.title.safeParse(value);
+								return result.success
+									? undefined
+									: result.error.issues[0].message;
+							},
 						}}
 						children={(field) => (
 							<div>
@@ -104,7 +105,13 @@ function CreateExpense() {
 					<form.Field
 						name="amount"
 						validators={{
-							onChange: createExpenseSchema.shape.amount,
+							onChange: (value) => {
+								const result =
+									zCreateExpenseSchema.shape.amount.safeParse(value);
+								return result.success
+									? undefined
+									: result.error.issues[0].message;
+							},
 						}}
 						children={(field) => (
 							<div>
@@ -115,7 +122,7 @@ function CreateExpense() {
 									value={field.state.value}
 									onBlur={field.handleBlur}
 									type="number"
-									onChange={(e) => field.handleChange(e.target.value)}
+									onChange={(e) => field.handleChange(Number(e.target.value))}
 								/>
 								{field.state.meta.touchedErrors
 									? (
@@ -129,7 +136,12 @@ function CreateExpense() {
 					<form.Field
 						name="date"
 						validators={{
-							onChange: createExpenseSchema.shape.date,
+							onChange: (value) => {
+								const result = zCreateExpenseSchema.shape.date.safeParse(value);
+								return result.success
+									? undefined
+									: result.error.issues[0].message;
+							},
 						}}
 						children={(field) => (
 							<div className="self-center">

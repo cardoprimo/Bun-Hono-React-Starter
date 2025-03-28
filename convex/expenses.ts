@@ -28,8 +28,13 @@ async function getUserExpenses(ctx: QueryCtx, userId: Id<'users'>) {
 
 export const getExpenses = query({
 	args: selectUserExpensesSchema,
-	handler: async (ctx, { userId }) => {
-		return await getUserExpenses(ctx, userId);
+	handler: async (ctx, { clerkId }) => {
+		invariant(clerkId, 'clerkId required');
+		const user = await ctx.db
+			.query('users')
+			.withIndex('clerkid_index', (u) => u.eq('clerkId', clerkId))
+			.collect();
+		return await getUserExpenses(ctx, user[0]._id);
 	},
 });
 

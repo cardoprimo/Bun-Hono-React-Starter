@@ -2,17 +2,26 @@
 	"compilerOptions": {
 		"target": "ESNext",
 		"jsx": "react-jsx",
-		"lib": ["ESNext"],
+		"lib": [
+			"ESNext"
+		],
 		"moduleDetection": "force",
 		"module": "ESNext",
-
 		/* Bundler mode */
 		"moduleResolution": "bundler",
-
 		"paths": {
-			"@/*": ["./*"],
-			"@server/*": ["./server/*"],
-			"@convex/*": ["./convex/*"]
+			"@/*": [
+				"./*"
+			],
+			"@server/*": [
+				"./server/*"
+			],
+			"@convex/*": [
+				"./convex/*"
+			],
+			"@shared/*": [
+				"./shared/*"
+			]
 		},
 		"allowImportingTsExtensions": true,
 		"allowJs": true,
@@ -21,7 +30,6 @@
 		"noEmit": true,
 		"forceConsistentCasingInFileNames": true,
 		"verbatimModuleSyntax": true,
-
 		/* Linting */
 		"skipLibCheck": true
 	}

@@ -1,6 +1,6 @@
 import { ClerkProvider, useAuth } from '@clerk/clerk-react';
 import { ConvexQueryClient } from '@convex-dev/react-query';
-import { env } from '@server/env';
+import { env } from '@shared/env';
 import {
 	MutationCache,
 	QueryClient,
@@ -42,6 +42,10 @@ const queryClient: QueryClient = new QueryClient({
 });
 convexQueryClient.connect(queryClient);
 
+const clerkPublicKey = env.PUBLIC_CLERK_PUBLISHABLE_KEY;
+
+const convex = new ConvexReactClient(env.CONVEX_URL);
+
 // Create a new router instance
 // const router = createRouter({ routeTree, context: { queryClient } }); ç
 const router = routerWithQueryClient(
@@ -70,9 +74,6 @@ declare module '@tanstack/react-router' {
 		router: typeof router;
 	}
 }
-const clerkPublicKey = env.PUBLIC_CLERK_PUBLISHABLE_KEY;
-
-const convex = new ConvexReactClient(env.CONVEX_URL);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
