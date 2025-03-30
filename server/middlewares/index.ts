@@ -6,11 +6,11 @@ import { cors } from 'hono/cors';
 import { createMiddleware } from 'hono/factory';
 import { logger } from 'hono/logger';
 import { requestId } from 'hono/request-id';
-import { env } from '../../shared/env';
+// import { env } from '../../shared/env';
 import { onError } from '../utils/onError';
 
 const convexUserMiddleware = createMiddleware(async (c, next) => {
-	const convex = new ConvexHttpClient(env.CONVEX_URL);
+	const convex = new ConvexHttpClient(import.meta.env.VITE_CONVEX_URL);
 
 	const clerkUser = getAuth(c);
 	if (!clerkUser?.userId) {
@@ -44,8 +44,8 @@ const convexUserMiddleware = createMiddleware(async (c, next) => {
 
 export const middlewares = [
 	clerkMiddleware({
-		publishableKey: env.PUBLIC_CLERK_PUBLISHABLE_KEY,
-		secretKey: env.CLERK_SECRET_KEY,
+		publishableKey: import.meta.env.VITE_CLERK_PUBLISHABLE_KEY,
+		secretKey: import.meta.env.CLERK_SECRET_KEY,
 	}),
 	convexUserMiddleware,
 	logger(),

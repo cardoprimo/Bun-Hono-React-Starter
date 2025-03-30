@@ -6,7 +6,8 @@ import { defineConfig } from 'vite';
 // https://vitejs.dev/config/
 export default defineConfig({
 	plugins: [react(), TanStackRouterVite()],
-	envPrefix: 'PUBLIC_',
+	envPrefix: 'VITE_',
+	envDir: '../',
 	resolve: {
 		alias: {
 			'@': path.resolve(import.meta.dir, './src'),

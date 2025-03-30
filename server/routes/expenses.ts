@@ -5,13 +5,13 @@ import { zCreateExpenseSchema, zDeleteExpenseSchema } from '@shared/zSchemas';
 
 import { ConvexClient } from 'convex/browser';
 import { api } from '../../convex/_generated/api';
-import { env } from '../../shared/env';
+// import { env } from '../../shared/env';
 import { createApp } from '../lib/create-app';
 import { jsonNotFound } from '../utils/notFound';
 import { jsonOnError } from '../utils/onError';
 import { jsonOk, jsonUnauthorized } from '../utils/responses';
 
-const convex = new ConvexClient(env.CONVEX_URL);
+const convex = new ConvexClient(import.meta.env.VITE_CONVEX_URL);
 
 export const expensesRoute = createApp()
 	.get('/', async (c) => {

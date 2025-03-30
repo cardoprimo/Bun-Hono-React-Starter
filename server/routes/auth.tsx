@@ -17,10 +17,10 @@ export const authRoute = createApp()
 		return c.redirect('/auth/logout');
 	})
 	.get('/me', async (c) => {
-		const userId = c.get('').var.clerkAuth?.userId;
-		if (!userId) {hiw you get ssl in cloudflare
+		const user = c.get('user');
+		if (!user) {
 			return c.redirect('/');
 		}
 
-		return c.json({ message: 'You are logged in.', userId });
+		return c.json({ message: `You are logged in., ${user.clerkId}` });
 	});

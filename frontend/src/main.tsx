@@ -24,7 +24,7 @@ import { NotFound } from './components/NotFound';
 import { routeTree } from './routeTree.gen';
 import './index.css';
 
-const convexQueryClient = new ConvexQueryClient(env.CONVEX_URL);
+const convexQueryClient = new ConvexQueryClient(import.meta.env.CONVEX_URL);
 
 // Create a client
 const queryClient: QueryClient = new QueryClient({
@@ -42,9 +42,9 @@ const queryClient: QueryClient = new QueryClient({
 });
 convexQueryClient.connect(queryClient);
 
-const clerkPublicKey = env.PUBLIC_CLERK_PUBLISHABLE_KEY;
+const clerkPublicKey = env.VITE_CLERK_PUBLISHABLE_KEY;
 
-const convex = new ConvexReactClient(env.CONVEX_URL);
+const convex = new ConvexReactClient(env.VITE_CONVEX_URL);
 
 // Create a new router instance
 // const router = createRouter({ routeTree, context: { queryClient } }); ç

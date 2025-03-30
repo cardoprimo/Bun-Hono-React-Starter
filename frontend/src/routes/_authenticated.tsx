@@ -11,7 +11,6 @@ export const Route = createFileRoute('/_authenticated')({
 			const data = await queryClient.fetchQuery(userQueryOptions);
 			return data;
 		} catch (e) {
-			console.error(e);
 			return { user: null };
 		}
 	},
@@ -19,9 +18,8 @@ export const Route = createFileRoute('/_authenticated')({
 });
 
 function Component() {
-	const { user } = Route.useRouteContext();
+	const user = Route.useRouteContext();
 	if (!user) {
-		console.log('not logged in');
 		return <Login />;
 	}
 

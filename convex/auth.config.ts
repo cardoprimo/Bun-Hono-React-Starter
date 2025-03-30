@@ -1,9 +1,10 @@
-import { env } from '../shared/env';
+// import { env } from '../shared/env';
 
 export default {
 	providers: [
 		{
-			domain: env.CLERK_JWT_ISSUER_URL,
+			// eslint-disable-next-line node/prefer-global/process
+			domain: process.env.CLERK_JWT_ISSUER_URL,
 			applicationID: 'convex',
 		},
 	],

@@ -17,7 +17,7 @@ export const Route = createFileRoute('/_authenticated/')({
 });
 
 async function getTotalSpent() {
-	const res = await api.expenses['total-spent'].$get();
+	const res = await api.expenses.$get();
 	if (!res.ok) {
 		throw new Error('server error');
 	}
@@ -39,7 +39,9 @@ function Index() {
 				<CardTitle>Total Spent</CardTitle>
 				<CardDescription>The total amount you've spent</CardDescription>
 			</CardHeader>
-			<CardContent>{isPending ? '...' : data.total}</CardContent>
+			<CardContent>
+				{isPending ? '...' : data.expenses.reduce((a, b) => a + b.amount, 0)}
+			</CardContent>
 		</Card>
 	);
 }
